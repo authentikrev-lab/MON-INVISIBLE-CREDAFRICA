@@ -3,8 +3,10 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mon Invisible - CRED'AFRICA</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>MON INVISIBLE - CRED'AFRICA</title>
+
   <style>
     body {
       margin: 0;
@@ -12,12 +14,14 @@
       background: #f2f5f9;
       color: #203047;
     }
+
     header {
       background: #123b70;
       color: white;
-      padding: 30px 20px;
+      padding: 32px 20px;
       text-align: center;
     }
+
     main {
       max-width: 440px;
       margin: 55px auto;
@@ -27,6 +31,7 @@
       box-shadow: 0 5px 20px #00000012;
       text-align: center;
     }
+
     input, button {
       box-sizing: border-box;
       width: 100%;
@@ -35,14 +40,29 @@
       border-radius: 8px;
       font-size: 16px;
     }
-    input { border: 1px solid #ccd3dd; }
+
+    input {
+      border: 1px solid #ccd3dd;
+    }
+
     button {
       background: #123b70;
       color: white;
       border: none;
       cursor: pointer;
     }
-    #message { margin-top: 20px; }
+
+    #resultat {
+      margin-top: 25px;
+      line-height: 1.7;
+    }
+
+    .invisible {
+      font-size: 24px;
+      font-weight: bold;
+      color: #123b70;
+    }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -50,6 +70,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>MON INVISIBLE</h1>
@@ -68,25 +89,96 @@
         required
         autocomplete="off"
       >
+
       <button type="submit">
         Découvrir mon Invisible
       </button>
     </form>
 
-    <p id="message" role="status"></p>
+    <div id="resultat" role="status"></div>
   </main>
 
   <footer>
     CRED'AFRICA - Jeu Mon Invisible
+    <p>Version de démonstration</p>
   </footer>
 
   <script>
+    // Données fictives pour les tests uniquement.
+    // Ne jamais placer les données réelles ici.
+
+    const participants = {
+      CR001: {
+        nom: "Aminata Koné",
+        site: "Siège",
+        invisible: "Jean Kouassi"
+      },
+      CR002: {
+        nom: "Jean Kouassi",
+        site: "Siège",
+        invisible: "Aminata Koné"
+      },
+      CR003: {
+        nom: "Mariam Traoré",
+        site: "Yopougon",
+        invisible: "Paul N'Guessan"
+      },
+      CR004: {
+        nom: "Paul N'Guessan",
+        site: "Yopougon",
+        invisible: "Mariam Traoré"
+      },
+      CR005: {
+        nom: "Fatou Diallo",
+        site: "Bouaké",
+        invisible: "Koffi Yao"
+      },
+      CR006: {
+        nom: "Koffi Yao",
+        site: "Bouaké",
+        invisible: "Fatou Diallo"
+      }
+    };
+
     document.getElementById("formulaire")
       .addEventListener("submit", function(event) {
         event.preventDefault();
-        document.getElementById("message").textContent =
-          "Interface de démonstration : " +
-          "connexion sécurisée en préparation.";
+
+        const matricule = document
+          .getElementById("matricule")
+          .value.trim().toUpperCase();
+
+        const resultat =
+          document.getElementById("resultat");
+
+        const salarie = participants[matricule];
+
+        resultat.replaceChildren();
+
+        if (!salarie) {
+          resultat.textContent =
+            "Matricule introuvable. Vérifiez votre saisie.";
+          return;
+        }
+
+        const bienvenue = document.createElement("p");
+        bienvenue.textContent =
+          "Bienvenue " + salarie.nom + " !";
+
+        const site = document.createElement("p");
+        site.textContent =
+          "Votre site : " + salarie.site;
+
+        const titre = document.createElement("p");
+        titre.textContent = "Votre Invisible est :";
+
+        const invisible = document.createElement("p");
+        invisible.className = "invisible";
+        invisible.textContent = salarie.invisible;
+
+        resultat.append(
+          bienvenue, site, titre, invisible
+        );
       });
   </script>
 </body>

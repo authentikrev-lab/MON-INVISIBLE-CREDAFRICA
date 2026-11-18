@@ -2,184 +2,266 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
-  <title>MON INVISIBLE - CRED'AFRICA</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f5f9;
-      color: #203047;
-    }
-
-    header {
-      background: #123b70;
-      color: white;
-      padding: 32px 20px;
-      text-align: center;
-    }
-
-    main {
-      max-width: 440px;
-      margin: 55px auto;
-      padding: 30px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 5px 20px #00000012;
-      text-align: center;
-    }
-
-    input, button {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    input {
-      border: 1px solid #ccd3dd;
-    }
-
-    button {
-      background: #123b70;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    #resultat {
-      margin-top: 25px;
-      line-height: 1.7;
-    }
-
-    .invisible {
-      font-size: 24px;
-      font-weight: bold;
-      color: #123b70;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 13px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MON INVISIBLE | CRED'AFRICA</title>
+<style>
+:root {
+  --vert: #007d3d;
+  --orange: #f58200;
+  --brun: #69300e;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #25342d;
+  background: linear-gradient(145deg, #e7f5eb, #fff5e8);
+  min-height: 100vh;
+}
+header {
+  background: white;
+  border-bottom: 4px solid var(--vert);
+  padding: 18px;
+  text-align: center;
+}
+header img {
+  width: 160px;
+  max-width: 80%;
+}
+main {
+  max-width: 900px;
+  margin: 35px auto;
+  padding: 0 18px;
+}
+.hero {
+  background: linear-gradient(135deg, #006a36, #00934b);
+  color: white;
+  text-align: center;
+  border-radius: 25px;
+  padding: 45px 22px 65px;
+  box-shadow: 0 15px 35px #006a3628;
+}
+.hero h1 {
+  font-size: clamp(34px, 7vw, 58px);
+  margin: 15px 0;
+}
+.hero p {
+  line-height: 1.6;
+  font-size: 17px;
+}
+.decor {
+  font-size: 35px;
+}
+.card {
+  position: relative;
+  max-width: 540px;
+  margin: -30px auto 0;
+  padding: 35px 25px;
+  background: white;
+  border-radius: 22px;
+  text-align: center;
+  box-shadow: 0 15px 35px #00000015;
+}
+.card h2 {
+  color: var(--brun);
+}
+.card p {
+  line-height: 1.6;
+}
+label {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  margin: 25px 0 8px;
+}
+input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #dce6dd;
+  border-radius: 12px;
+  font-size: 18px;
+}
+input:focus {
+  outline: 3px solid #007d3d33;
+  border-color: var(--vert);
+}
+button {
+  width: 100%;
+  padding: 17px;
+  margin-top: 15px;
+  background: linear-gradient(110deg, #f58200, #dc6900);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  filter: brightness(.95);
+}
+#resultat {
+  margin-top: 25px;
+}
+.revelation {
+  background: #effaf2;
+  border: 1px solid #cfe7d6;
+  border-radius: 15px;
+  padding: 20px;
+}
+.nom-invisible {
+  font-size: 27px;
+  font-weight: bold;
+  color: var(--vert);
+}
+.note, footer {
+  text-align: center;
+  padding: 20px;
+  color: #66736a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+@media(max-width: 600px) {
+  .hero { padding: 35px 18px 55px; }
+  .card { padding: 25px 20px; }
+}
+</style>
 </head>
-
 <body>
-  <header>
-    <h1>MON INVISIBLE</h1>
-    <p>CRED'AFRICA</p>
-  </header>
 
-  <main>
-    <h2>Découvrez votre Invisible</h2>
-    <p>Saisissez votre matricule professionnel.</p>
+<header>
+  <img src="logo-credafrica.png" alt="Logo CRED'AFRICA">
+  <p>🎄 ÉDITION SPÉCIALE NOËL 2026 🎄</p>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="decor">🎁 ✨ 🎄 ✨ 🎁</div>
+    <p>UN MOMENT DE PARTAGE ET DE SURPRISE</p>
+    <h1>MON INVISIBLE</h1>
+    <p>
+      La magie de Noël nous rapproche !
+      Découvrez la personne à qui vous
+      apporterez une belle surprise.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>🎁 Qui est votre Invisible ?</h2>
+    <p>
+      Saisissez votre matricule professionnel
+      pour découvrir votre attribution.
+    </p>
 
     <form id="formulaire">
+      <label for="matricule">Votre matricule</label>
       <input
         id="matricule"
         type="text"
-        placeholder="Votre matricule"
+        placeholder="Ex. : CR001"
         required
         autocomplete="off"
       >
-
       <button type="submit">
-        Découvrir mon Invisible
+        ✨ Découvrir mon Invisible
       </button>
     </form>
 
     <div id="resultat" role="status"></div>
-  </main>
+  </section>
 
-  <footer>
-    CRED'AFRICA - Jeu Mon Invisible
-    <p>Version de démonstration</p>
-  </footer>
+  <p class="note">
+    Version de démonstration avec six salariés fictifs.
+    Aucun nouveau tirage n'est effectué.
+  </p>
+</main>
 
-  <script>
-    // Données fictives pour les tests uniquement.
-    // Ne jamais placer les données réelles ici.
+<footer>
+  CRED'AFRICA – Partenaire pour la vie
+  <p>🎄 Joyeuses fêtes de Noël 2026 🎄</p>
+</footer>
 
-    const participants = {
-      CR001: {
-        nom: "Aminata Koné",
-        site: "Siège",
-        invisible: "Jean Kouassi"
-      },
-      CR002: {
-        nom: "Jean Kouassi",
-        site: "Siège",
-        invisible: "Aminata Koné"
-      },
-      CR003: {
-        nom: "Mariam Traoré",
-        site: "Yopougon",
-        invisible: "Paul N'Guessan"
-      },
-      CR004: {
-        nom: "Paul N'Guessan",
-        site: "Yopougon",
-        invisible: "Mariam Traoré"
-      },
-      CR005: {
-        nom: "Fatou Diallo",
-        site: "Bouaké",
-        invisible: "Koffi Yao"
-      },
-      CR006: {
-        nom: "Koffi Yao",
-        site: "Bouaké",
-        invisible: "Fatou Diallo"
-      }
-    };
+<script>
+// Données fictives uniquement.
+// Ne pas insérer les salariés réels dans ce fichier public.
+const participants = {
+  CR001: {
+    nom: "Aminata Koné",
+    site: "Siège",
+    invisible: "Jean Kouassi"
+  },
+  CR002: {
+    nom: "Jean Kouassi",
+    site: "Siège",
+    invisible: "Aminata Koné"
+  },
+  CR003: {
+    nom: "Mariam Traoré",
+    site: "Yopougon",
+    invisible: "Paul N'Guessan"
+  },
+  CR004: {
+    nom: "Paul N'Guessan",
+    site: "Yopougon",
+    invisible: "Mariam Traoré"
+  },
+  CR005: {
+    nom: "Fatou Diallo",
+    site: "Bouaké",
+    invisible: "Koffi Yao"
+  },
+  CR006: {
+    nom: "Koffi Yao",
+    site: "Bouaké",
+    invisible: "Fatou Diallo"
+  }
+};
 
-    document.getElementById("formulaire")
-      .addEventListener("submit", function(event) {
-        event.preventDefault();
+document.getElementById("formulaire")
+.addEventListener("submit", function(event) {
+  event.preventDefault();
 
-        const matricule = document
-          .getElementById("matricule")
-          .value.trim().toUpperCase();
+  const matricule = document
+    .getElementById("matricule")
+    .value.trim().toUpperCase();
 
-        const resultat =
-          document.getElementById("resultat");
+  const resultat = document.getElementById("resultat");
+  resultat.replaceChildren();
 
-        const salarie = participants[matricule];
+  const salarie = Object.prototype.hasOwnProperty.call(
+    participants, matricule
+  ) ? participants[matricule] : null;
 
-        resultat.replaceChildren();
+  if (!salarie) {
+    resultat.textContent =
+      "Matricule introuvable. Vérifiez votre saisie.";
+    return;
+  }
 
-        if (!salarie) {
-          resultat.textContent =
-            "Matricule introuvable. Vérifiez votre saisie.";
-          return;
-        }
+  const carte = document.createElement("div");
+  carte.className = "revelation";
 
-        const bienvenue = document.createElement("p");
-        bienvenue.textContent =
-          "Bienvenue " + salarie.nom + " !";
+  const bienvenue = document.createElement("p");
+  bienvenue.textContent = "Bienvenue " + salarie.nom + " !";
 
-        const site = document.createElement("p");
-        site.textContent =
-          "Votre site : " + salarie.site;
+  const site = document.createElement("p");
+  site.textContent = "Votre site : " + salarie.site;
 
-        const titre = document.createElement("p");
-        titre.textContent = "Votre Invisible est :";
+  const titre = document.createElement("p");
+  titre.textContent = "🎉 Votre Invisible est :";
 
-        const invisible = document.createElement("p");
-        invisible.className = "invisible";
-        invisible.textContent = salarie.invisible;
+  const nom = document.createElement("p");
+  nom.className = "nom-invisible";
+  nom.textContent = salarie.invisible;
 
-        resultat.append(
-          bienvenue, site, titre, invisible
-        );
-      });
-  </script>
+  const message = document.createElement("p");
+  message.textContent = "Que la magie de Noël opère ! 🎄";
+
+  carte.append(bienvenue, site, titre, nom, message);
+  resultat.append(carte);
+});
+</script>
+
 </body>
 </html>

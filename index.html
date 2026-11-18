@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mon Invisible - CRED'AFRICA</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f5f9;
+      color: #203047;
+    }
+    header {
+      background: #123b70;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    main {
+      max-width: 440px;
+      margin: 55px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px #00000012;
+      text-align: center;
+    }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input { border: 1px solid #ccd3dd; }
+    button {
+      background: #123b70;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #message { margin-top: 20px; }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MON INVISIBLE</h1>
+    <p>CRED'AFRICA</p>
+  </header>
+
+  <main>
+    <h2>Découvrez votre Invisible</h2>
+    <p>Saisissez votre matricule professionnel.</p>
+
+    <form id="formulaire">
+      <input
+        id="matricule"
+        type="text"
+        placeholder="Votre matricule"
+        required
+        autocomplete="off"
+      >
+      <button type="submit">
+        Découvrir mon Invisible
+      </button>
+    </form>
+
+    <p id="message" role="status"></p>
+  </main>
+
+  <footer>
+    CRED'AFRICA - Jeu Mon Invisible
+  </footer>
+
+  <script>
+    document.getElementById("formulaire")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+        document.getElementById("message").textContent =
+          "Interface de démonstration : " +
+          "connexion sécurisée en préparation.";
+      });
+  </script>
+</body>
+</html>

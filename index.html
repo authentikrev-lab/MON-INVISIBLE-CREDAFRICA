@@ -163,7 +163,9 @@ button:hover {
         required
         autocomplete="off"
       >
-      <button type="submit">
+      <label for="date_naissance">Votre date de naissance</label>
+      <input id="date_naissance" type="date" required autocomplete="bday" max="2026-11-19">
+      <button id="bouton-decouvrir" type="submit">
         ✨ Découvrir mon Invisible
       </button>
     </form>
@@ -172,8 +174,7 @@ button:hover {
   </section>
 
   <p class="note">
-    Version de démonstration avec six salariés fictifs.
-    Aucun nouveau tirage n'est effectué.
+    Votre attribution est personnelle et confidentielle. Aucun tirage n'est effectué lors de la consultation.
   </p>
 </main>
 
@@ -183,83 +184,157 @@ button:hover {
 </footer>
 
 <script>
-// Données fictives uniquement.
-// Ne pas insérer les salariés réels dans ce fichier public.
-const participants = {
-  CR001: {
-    nom: "Aminata Koné",
-    site: "Siège",
-    invisible: "Jean Kouassi"
-  },
-  CR002: {
-    nom: "Jean Kouassi",
-    site: "Siège",
-    invisible: "Aminata Koné"
-  },
-  CR003: {
-    nom: "Mariam Traoré",
-    site: "Yopougon",
-    invisible: "Paul N'Guessan"
-  },
-  CR004: {
-    nom: "Paul N'Guessan",
-    site: "Yopougon",
-    invisible: "Mariam Traoré"
-  },
-  CR005: {
-    nom: "Fatou Diallo",
-    site: "Bouaké",
-    invisible: "Koffi Yao"
-  },
-  CR006: {
-    nom: "Koffi Yao",
-    site: "Bouaké",
-    invisible: "Fatou Diallo"
-  }
-};
+// Adresse de l'Edge Function Supabase du projet CRED'AFRICA.
+// À confirmer avant publication : ne jamais saisir une clé secrète ici.
+const ENDPOINT = "https://dweftcagivazzdpbzvxi.supabase.co/functions/v1/verifier-identite-invisible";
+const form = document.getElementById("formulaire");
+const resultat = document.getElementById("resultat");
+const bouton = document.getElementById("bouton-decouvrir");
+const matriculeInput = document.getElementById("matricule");
+const naissanceInput = document.getElementById("date_naissance");
 
-document.getElementById("formulaire")
-.addEventListener("submit", function(event) {
-  event.preventDefault();
-
-  const matricule = document
-    .getElementById("matricule")
-    .value.trim().toUpperCase();
-
-  const resultat = document.getElementById("resultat");
+function afficherMessage(message) {
   resultat.replaceChildren();
+  const p = document.createElement("p");
+  p.textContent = message;
+  resultat.append(p);
+}
 
-  const salarie = Object.prototype.hasOwnProperty.call(
-    participants, matricule
-  ) ? participants[matricule] : null;
-
-  if (!salarie) {
-    resultat.textContent =
-      "Matricule introuvable. Vérifiez votre saisie.";
-    return;
+function dessinerCarte(nom) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1080;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#f3f8f3";
+  ctx.fillRect(0, 0, 1080, 1080);
+  ctx.fillStyle = "#007d3d";
+  ctx.fillRect(0, 0, 1080, 300);
+  ctx.textAlign = "center";
+  ctx.fillStyle = "white";
+  ctx.font = "bold 72px Arial";
+  ctx.fillText("MON INVISIBLE", 540, 150);
+  ctx.font = "36px Arial";
+  ctx.fillText("CRED'AFRICA • NOËL 2026", 540, 220);
+  ctx.fillStyle = "#69300e";
+  ctx.font = "40px Arial";
+  ctx.fillText("Ma surprise de Noël est destinée à :", 540, 420);
+  // Retour à la ligne pour les noms longs.
+  const mots = nom.split(/\s+/);
+  const lignes = [];
+  let ligne = "";
+  ctx.font = "bold 66px Arial";
+  for (const mot of mots) {
+    const essai = ligne ? ligne + " " + mot : mot;
+    if (ctx.measureText(essai).width > 940 && ligne) {
+      lignes.push(ligne);
+      ligne = mot;
+    } else ligne = essai;
   }
+  if (ligne) lignes.push(ligne);
+  ctx.fillStyle = "#007d3d";
+  lignes.forEach((l, i) => ctx.fillText(l, 540, 550 + i * 82, 940));
+  ctx.fillStyle = "#f58200";
+  ctx.fillRect(120, 815, 840, 5);
+  ctx.fillStyle = "#69300e";
+  ctx.font = "38px Arial";
+  ctx.fillText("Que la magie de Noël opère !", 540, 905);
+  ctx.font = "28px Arial";
+  ctx.fillText("Partenaire pour la vie", 540, 975);
+  return canvas;
+}
 
+function creerBouton(texte, action) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = texte;
+  b.addEventListener("click", action);
+  return b;
+}
+
+function enregistrerCarte(canvas) {
+  const a = document.createElement("a");
+  a.download = "mon-invisible-credafrica.png";
+  a.href = canvas.toDataURL("image/png");
+  a.click();
+}
+
+async function partagerCarte(canvas) {
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+  if (!blob) return afficherMessage("Impossible de préparer l'image. Réessayez.");
+  const fichier = new File([blob], "mon-invisible-credafrica.png", { type: "image/png" });
+  if (navigator.share && navigator.canShare?.({ files: [fichier] })) {
+    try {
+      await navigator.share({ files: [fichier] });
+    } catch (err) {
+      if (err?.name !== "AbortError") console.warn("Partage indisponible");
+    }
+  } else {
+    enregistrerCarte(canvas);
+    alert("La carte a été enregistrée. Ouvrez WhatsApp et envoyez vous-même l'image au destinataire de votre choix.");
+  }
+}
+
+function afficherRevelation(nom) {
+  resultat.replaceChildren();
   const carte = document.createElement("div");
   carte.className = "revelation";
-
-  const bienvenue = document.createElement("p");
-  bienvenue.textContent = "Bienvenue " + salarie.nom + " !";
-
-  const site = document.createElement("p");
-  site.textContent = "Votre site : " + salarie.site;
-
   const titre = document.createElement("p");
   titre.textContent = "🎉 Votre Invisible est :";
-
-  const nom = document.createElement("p");
-  nom.className = "nom-invisible";
-  nom.textContent = salarie.invisible;
-
+  const nomElement = document.createElement("p");
+  nomElement.className = "nom-invisible";
+  nomElement.textContent = nom;
   const message = document.createElement("p");
   message.textContent = "Que la magie de Noël opère ! 🎄";
-
-  carte.append(bienvenue, site, titre, nom, message);
+  const canvas = dessinerCarte(nom);
+  const partager = creerBouton("📱 Partager ma carte (WhatsApp)", () => partagerCarte(canvas));
+  const enregistrer = creerBouton("⬇️ Enregistrer ma carte en image", () => enregistrerCarte(canvas));
+  carte.append(titre, nomElement, message, partager, enregistrer);
   resultat.append(carte);
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const matricule = matriculeInput.value.trim().toUpperCase();
+  const date_naissance = naissanceInput.value;
+  if (!matricule || !/^\d{4}-\d{2}-\d{2}$/.test(date_naissance)) {
+    afficherMessage("Veuillez renseigner votre matricule et votre date de naissance.");
+    return;
+  }
+  bouton.disabled = true;
+  bouton.textContent = "Vérification en cours…";
+  afficherMessage("Vérification de votre identité…");
+  const controleur = new AbortController();
+  const delai = setTimeout(() => controleur.abort(), 15000);
+  try {
+    const reponse = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matricule, date_naissance }),
+      signal: controleur.signal,
+      cache: "no-store"
+    });
+    const donnees = await reponse.json();
+    if (reponse.status === 503 || donnees.statut === "maintenance") {
+      afficherMessage("Le service est temporairement en maintenance. Revenez prochainement.");
+    } else if (donnees.statut === "succes" && typeof donnees.mon_invisible === "string") {
+      naissanceInput.value = "";
+      afficherRevelation(donnees.mon_invisible);
+    } else if (donnees.statut === "bloque") {
+      afficherMessage("Trop de tentatives. Veuillez patienter avant de réessayer.");
+    } else if (donnees.statut === "identite_incorrecte") {
+      afficherMessage("Matricule ou date de naissance incorrect. Vérifiez votre saisie.");
+    } else if (donnees.statut === "tirage_indisponible") {
+      afficherMessage("Votre attribution n'est pas encore disponible.");
+    } else {
+      afficherMessage("Le service est momentanément indisponible. Réessayez plus tard.");
+    }
+  } catch {
+    afficherMessage("Connexion impossible pour le moment. Vérifiez votre connexion et réessayez.");
+  } finally {
+    clearTimeout(delai);
+    bouton.disabled = false;
+    bouton.textContent = "✨ Découvrir mon Invisible";
+  }
 });
 </script>
 

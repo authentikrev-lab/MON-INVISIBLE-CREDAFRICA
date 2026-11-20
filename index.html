@@ -319,7 +319,10 @@ form.addEventListener("submit", async (event) => {
     } else if (donnees.statut === "succes" && typeof donnees.mon_invisible === "string") {
       naissanceInput.value = "";
       afficherRevelation(donnees.mon_invisible);
-    } else if (donnees.statut === "bloque") {
+    } else if (
+  ["bloque", "source_bloquee", "limite_globale"]
+    .includes(donnees.statut)
+) {
       afficherMessage("Trop de tentatives. Veuillez patienter avant de réessayer.");
     } else if (donnees.statut === "identite_incorrecte") {
       afficherMessage("Matricule ou date de naissance incorrect. Vérifiez votre saisie.");

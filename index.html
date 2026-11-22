@@ -82,6 +82,11 @@ input {
   border-radius: 12px;
   font-size: 18px;
 }
+ .matricule-groupe { display: flex; align-items: stretch; border: 2px solid #dce6dd; border-radius: 12px; overflow: hidden; background: white; }
+.matricule-groupe:focus-within { outline: 3px solid #007d3d33; border-color: var(--vert); }
+.matricule-prefixe { display: flex; align-items: center; padding: 0 0 0 16px; font-size: 18px; font-weight: 600; white-space: nowrap; color: #254b31; }
+.matricule-groupe input { border: 0; border-radius: 0; min-width: 0; padding-left: 0; }
+.matricule-groupe input:focus { outline: none; border: 0; }
 input:focus {
   outline: 3px solid #007d3d33;
   border-color: var(--vert);
@@ -156,15 +161,22 @@ button:hover {
 
     <form id="formulaire">
       <label for="matricule">Votre matricule</label>
-      <input
-        id="matricule"
-        type="text"
-        placeholder="Ex. : CR001"
-        required
-        autocomplete="off"
-      >
-      <label for="date_naissance">Votre date de naissance</label>
-      <input id="date_naissance" type="date" required autocomplete="bday" max="2026-11-19">
+      <div class="matricule-groupe">
+        <span class="matricule-prefixe" aria-hidden="true">Cred_</span>
+        <input
+          id="matricule"
+          type="text"
+          placeholder="Ex. : 26/85"
+          aria-label="Suite du matricule après Cred_"
+          required
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+      </div>
+      <label for="date_naissance">Votre date de naissance (JJ/MM/AAAA)</label>
+      <input id="date_naissance" type="text" inputmode="numeric" placeholder="JJ/MM/AAAA" maxlength="10" required autocomplete="off" aria-describedby="date_aide">
+      <small id="date_aide" style="display:block;text-align:left;margin-top:7px;color:#566b5c">Exemple : 23/02/1995 — saisissez le jour, le mois et l'année.</small>
       <button id="bouton-decouvrir" type="submit">
         ✨ Découvrir mon Invisible
       </button>
@@ -294,12 +306,28 @@ function afficherRevelation(nom) {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const matricule = matriculeInput.value.trim().toUpperCase();
-  const date_naissance = naissanceInput.value;
-  if (!matricule || !/^\d{4}-\d{2}-\d{2}$/.test(date_naissance)) {
-    afficherMessage("Veuillez renseigner votre matricule et votre date de naissance.");
+  const suffixe = matriculeInput.value.trim();
+  if (!/^[A-Za-z0-9/-]{1,45}$/.test(suffixe)) {
+    afficherMessage("Saisissez uniquement la suite de votre matricule après Cred_ (exemple : 26/85).");
     return;
   }
+  const matricule = ("Cred_" + suffixe).toUpperCase();
+  const saisieDate = naissanceInput.value.trim();
+  const correspondance = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(saisieDate);
+  if (!correspondance) {
+    afficherMessage("Saisissez votre date de naissance au format JJ/MM/AAAA (exemple : 23/02/1995).");
+    return;
+  }
+  const [, jour, mois, annee] = correspondance;
+  const dateTest = new Date(Date.UTC(Number(annee), Number(mois) - 1, Number(jour)));
+  if (Number(annee) < 1900 || Number(annee) > 9999 ||
+      dateTest.getUTCFullYear() !== Number(annee) ||
+      dateTest.getUTCMonth() + 1 !== Number(mois) ||
+      dateTest.getUTCDate() !== Number(jour)) {
+    afficherMessage("Cette date n'existe pas. Vérifiez le jour, le mois et l'année.");
+    return;
+  }
+  const date_naissance = `${annee}-${mois}-${jour}`;
   bouton.disabled = true;
   bouton.textContent = "Vérification en cours…";
   afficherMessage("Vérification de votre identité…");
@@ -319,10 +347,7 @@ form.addEventListener("submit", async (event) => {
     } else if (donnees.statut === "succes" && typeof donnees.mon_invisible === "string") {
       naissanceInput.value = "";
       afficherRevelation(donnees.mon_invisible);
-    } else if (
-  ["bloque", "source_bloquee", "limite_globale"]
-    .includes(donnees.statut)
-) {
+    } else if (donnees.statut === "bloque") {
       afficherMessage("Trop de tentatives. Veuillez patienter avant de réessayer.");
     } else if (donnees.statut === "identite_incorrecte") {
       afficherMessage("Matricule ou date de naissance incorrect. Vérifiez votre saisie.");
